@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: mcp-staging
+
+resources:
+  - ../../base
+
+patches:
+  - target:
+      kind: Deployment
+      name: mcp-sample-server
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 2
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: mcp-sample-server
+    patch: |
+      - op: replace
+        path: /spec/minReplicas
+        value: 2
+      - op: replace
+        path: /spec/maxReplicas
+        value: 5
+
+images:
+  - name: IMAGE_PLACEHOLDER
+    newName: registry.example.com/mcp-sample-server
+    newTag: "staging-latest"

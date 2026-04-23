@@ -1,0 +1,48 @@
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+
+### Maven ###
+target/
+!.mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+### VS Code ###
+.vscode/
+.settings/
+
+### Eclipse ###
+.classpath
+.project
+.factorypath
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+logs/
+
+### Env ###
+.env
+.env.local
+
+### Claude Code — user-local state (keep .claude/CLAUDE.md tracked) ###
+.claude/settings.local.json
+.claude/sessions/
+.claude/history/
+.claude/logs/

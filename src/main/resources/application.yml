@@ -1,0 +1,71 @@
+# ============================================================
+# MCP Server Template - Application Configuration
+# ============================================================
+spring:
+  application:
+    name: mcp-sample-server
+
+  # --- MCP Server Configuration ---
+  ai:
+    mcp:
+      server:
+        name: ${spring.application.name}
+        version: 1.0.0
+        protocol: STREAMABLE          # STREAMABLE | STATELESS | SSE
+        type: SYNC                     # SYNC | ASYNC
+        capabilities:
+          tool: true
+          resource: false
+          prompt: false
+        # Annotation scanner tự động detect @Tool beans trong Spring context
+        annotation-scanner:
+          enabled: true
+        # Streamable HTTP transport config
+        streamable-http:
+          max-sessions: 100
+
+# --- Server ---
+server:
+  port: 8080
+  shutdown: graceful
+  tomcat:
+    accept-count: 200
+    max-connections: 10000
+    threads:
+      max: 200
+      min-spare: 20
+
+# --- Actuator (Health) ---
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true                  # /actuator/health/liveness + /readiness cho K8s
+
+# --- Logging ---
+logging:
+  level:
+    root: INFO
+    com.sample.mcp.server: DEBUG
+    org.springframework.ai.mcp: DEBUG
+  pattern:
+    console: "%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n"
+
+---
+# ============================================================
+# Profile: prod
+# ============================================================
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+logging:
+  level:
+    root: WARN
+    com.sample.mcp.server: INFO

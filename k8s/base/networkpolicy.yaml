@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mcp-sample-server
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: mcp-sample-server
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: mcp-client
+      ports:
+        - port: 8080
+          protocol: TCP
+  egress:
+    # DNS resolution
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Downstream services (điều chỉnh theo topology thực tế)
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: backend-services
+      ports:
+        - port: 8080
+          protocol: TCP
